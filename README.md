@@ -1,10 +1,10 @@
 # CG 2022/2023
 
 ## Group T09G09
-| Name                     | Number    | E-Mail             |
-| ------------------------ | --------- | ------------------ |
-| Igor Liberato de Castro  | 202000161 | up202000161@up.pt  |
-| John Doe                 | 201901010 | ...                |
+| Name                                          | Number    | E-Mail             |
+| --------------------------------------------- | --------- | ------------------ |
+| Igor Liberato de Castro                       | 202000161 | up202000161@up.pt  |
+| José Luis Barbosa Soares da Silva             | 201906576 | up201906576@up.pt  |
 
 ----
 
