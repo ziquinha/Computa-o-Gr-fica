@@ -27,6 +27,7 @@ export class MyScene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.tangram = new MyTangram(this);
 
+
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.displayMyDiamond = true;
