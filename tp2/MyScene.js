@@ -1,5 +1,13 @@
 import { CGFscene, CGFcamera, CGFaxis } from "../lib/CGF.js";
+
 import { MyTangram } from "./MyTangram.js";
+import { MyDiamond } from "./MyDiamond.js";
+import { MyTriangle } from "./MyTriangle.js";
+import { MyParallelogram } from "./MyParallelogram.js";
+import { MyTriangleSmall } from "./MyTriangleSmall.js";
+import { MyTriangleBig } from "./MyTriangleBig.js";
+import { MyUnitCube } from "./MyUnitCube.js";
+
 
 /**
  * MyScene
@@ -25,17 +33,24 @@ export class MyScene extends CGFscene {
 
     //Initialize scene objects
     this.axis = new CGFaxis(this);
+
     this.tangram = new MyTangram(this);
 
+    this.diamond = new MyDiamond(this);
+    this.triangle = new MyTriangle(this);
+    this.parallelogram = new MyParallelogram(this);
+    this.triangleSmall = new MyTriangleSmall(this);
+    this.triangleBig = new MyTriangleBig(this);
+    this.unitcube = new MyUnitCube(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
-    this.displayMyDiamond = true;
-    this.displayMyTriangle = true;
-    this.displayMyParallelogram = true;
-    this.displayMyTriangleSmall = true;
-    this.displayMyTriangleBig = true;
-    this.displayMyTangram = true;
+    this.displayMyDiamond = false;
+    this.displayMyTriangle = false;
+    this.displayMyParallelogram = false;
+    this.displayMyTriangleSmall = false;
+    this.displayMyTriangleBig = false;
+    this.displayMyUnitCube = true;
 
     this.scaleFactor = 1;
   }
@@ -79,6 +94,34 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     if (this.displayMyTangram) this.tangram.display(this);
+    var sca = [
+      this.scaleFactor,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      this.scaleFactor,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      this.scaleFactor,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+    ];
+
+    this.multMatrix(sca);
+
+    // ---- BEGIN Primitive drawing section
+    if (this.displayMyDiamond) this.diamond.display();
+    if (this.displayMyTriangle) this.triangle.display();
+    if (this.displayMyParallelogram) this.parallelogram.display();
+    if (this.displayMyTriangleSmall) this.triangleSmall.display();
+    if (this.displayMyTriangleBig) this.triangleBig.display();
+    if (this.displayMyUnitCube) this.unitcube.display();
 
     // ---- END Primitive drawing section
   }
