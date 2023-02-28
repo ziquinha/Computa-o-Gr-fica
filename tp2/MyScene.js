@@ -29,7 +29,7 @@ export class MyScene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.tangram = new MyTangram(this);
     this.unitcube = new MyUnitCube(this);
-    //this.unitcubequad = new MyUnitCubeQuad(this);
+    this.unitcubequad = new MyUnitCubeQuad(this);
 
 
     //Objects connected to MyInterface
@@ -41,7 +41,7 @@ export class MyScene extends CGFscene {
     this.displayMyTriangleBig = true;
     this.displayMyTangram = true;
     this.displayMyUnitCube = true;
-    this.displayUnitCubeQuad = false;
+    this.displayUnitCubeQuad = true;
 
     this.scaleFactor = 1;
   }
@@ -88,11 +88,11 @@ export class MyScene extends CGFscene {
     
     this.translate(3,0,4.2);
     this.rotate(-90.0*Math.PI/180.0,1,0,0);
-    if(this.displayMyUnitCube){
+    if(this.displayUnitCubeQuad){
       this.pushMatrix();
       this.scale(6,8.5,0.5);
       this.translate(0,0,-0.6);
-      this.unitcube.display();
+      this.unitcubequad.display();
       this.popMatrix();
     }
 
@@ -104,8 +104,6 @@ export class MyScene extends CGFscene {
     }
     this.popMatrix(); 
 
-
-   //if (this.displayUnitCubeQuad) this.unitcubequad.display();
 
     // ---- END Primitive drawing section
   }
