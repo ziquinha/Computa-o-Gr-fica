@@ -39,7 +39,7 @@ export class MyTangram extends CGFobject {
 			0.0, 0.0, 1.0, 0.0,
 			0.0, 0.0, 0.0, 1.0,
 		];
-
+		scene.multMatrix(translate);
 		scene.multMatrix(rotate);
 		if (scene.displayMyDiamond) this.diamond.display();
 		scene.popMatrix();
@@ -146,4 +146,3 @@ export class MyTangram extends CGFobject {
 		scene.pushMatrix();
 	}
 }
-

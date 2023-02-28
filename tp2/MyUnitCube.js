@@ -12,32 +12,30 @@ export class MyUnitCube extends CGFobject {
 
     initBuffers() {
 		this.vertices = [
-			-0.5, -0.5, 0.5,  //front left down  -0-
-			0.5, -0.5, 0.5,	  //front right down -1-
-			0.5, 0.5, 0.5,	  //front right up   -2-
-			-0.5, 0.5, 0.5,   // front left up   -3-
-            -0.5,-0.5,-0.5,   // back left down  -4-
-            0.5, -0.5,-0.5,   // back right down -5-
-            -0.5,0.5, -0.5,   // back left up    -6-
-            0.5,0.5,-0.5      // back right up   -7-
-
+			0.5,0.5,0.5,
+			0.5,0.5,-0.5,
+			-0.5,0.5,-0.5,
+			-0.5,0.5,0.5,
+			0.5,-0.5,0.5,
+			0.5,-0.5,-0.5,
+			-0.5,-0.5,-0.5,
+			-0.5,-0.5,0.5
 		];
 
 		//Counter-clockwise reference of vertices
 		this.indices = [
-			0, 1, 2,
-            2,3,0,
-            0,1,5,
-            5,4,0,
-            1,5,7,
-            7,2,1,
-            3,0,4,
-            4,6,3,
-            4,5,7,
-            7,6,4,
-            3,2,7,
-            7,6,3
-
+			0,4,5,
+			0,5,1,
+			1,5,6,
+			1,6,2,
+			2,6,7,
+			2,7,3,
+			0,3,7,
+			0,7,4,
+			1,2,3,
+			1,3,0,
+			7,6,5,
+			7,5,4
 		];
 
 		//The defined indices (and corresponding vertices)
