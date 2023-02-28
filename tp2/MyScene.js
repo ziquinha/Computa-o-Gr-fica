@@ -1,13 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis } from "../lib/CGF.js";
-
 import { MyTangram } from "./MyTangram.js";
-import { MyDiamond } from "./MyDiamond.js";
-import { MyTriangle } from "./MyTriangle.js";
-import { MyParallelogram } from "./MyParallelogram.js";
-import { MyTriangleSmall } from "./MyTriangleSmall.js";
-import { MyTriangleBig } from "./MyTriangleBig.js";
 import { MyUnitCube } from "./MyUnitCube.js";
-
+import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -33,24 +27,21 @@ export class MyScene extends CGFscene {
 
     //Initialize scene objects
     this.axis = new CGFaxis(this);
-
     this.tangram = new MyTangram(this);
-
-    this.diamond = new MyDiamond(this);
-    this.triangle = new MyTriangle(this);
-    this.parallelogram = new MyParallelogram(this);
-    this.triangleSmall = new MyTriangleSmall(this);
-    this.triangleBig = new MyTriangleBig(this);
     this.unitcube = new MyUnitCube(this);
+    this.unitcubequad = new MyUnitCubeQuad(this);
+
 
     //Objects connected to MyInterface
     this.displayAxis = true;
-    this.displayMyDiamond = false;
-    this.displayMyTriangle = false;
-    this.displayMyParallelogram = false;
-    this.displayMyTriangleSmall = false;
-    this.displayMyTriangleBig = false;
+    this.displayMyDiamond = true;
+    this.displayMyTriangle = true;
+    this.displayMyParallelogram = true;
+    this.displayMyTriangleSmall = true;
+    this.displayMyTriangleBig = true;
+    this.displayMyTangram = true;
     this.displayMyUnitCube = true;
+    this.displayUnitCubeQuad = true;
 
     this.scaleFactor = 1;
   }
@@ -94,34 +85,40 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     if (this.displayMyTangram) this.tangram.display(this);
-    var sca = [
-      this.scaleFactor,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      this.scaleFactor,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      this.scaleFactor,
-      0.0,
-      0.0,
-      0.0,
-      0.0,
-      1.0,
-    ];
+    this.pushMatrix();
+    
+    this.translate(2.5,0,4.2)
+    this.rotate(-90.0*Math.PI/180.0, 1,0 ,0 )
+    if (this.displayMyUnitCube){
+      //this.pushMatrix();
+      //this.translate(0,0,-0.6);
+      
+      //this.unitcube.display();
+      //this.popMatrix();
+      this.pushMatrix();
+      this.scale(5,9,0.5);
+      this.translate(0,0,-0.6)
+      this.unitcube.display();
+      this.popMatrix();
+    };
 
-    this.multMatrix(sca);
+    if (this.displayMyTangram){
+      this.pushMatrix();
+      this.translate(0,-0.8,0)
+      this.tangram.display();
+      this.popMatrix();
+    }
+    this.popMatrix();
 
-    // ---- BEGIN Primitive drawing section
-    if (this.displayMyDiamond) this.diamond.display();
-    if (this.displayMyTriangle) this.triangle.display();
-    if (this.displayMyParallelogram) this.parallelogram.display();
-    if (this.displayMyTriangleSmall) this.triangleSmall.display();
-    if (this.displayMyTriangleBig) this.triangleBig.display();
-    if (this.displayMyUnitCube) this.unitcube.display();
+    if (this.displayUnitCubeQuad){ 
+      this.pushMatrix();
+      this.scale(5,9,0.5);
+      this.translate(0,0,-0.6)
+      this.unitcubequad.display();
+      this.popMatrix();
+   }
+
+   if (this.displayUnitCubeQuad) this.unitcubequad.display();
 
     // ---- END Primitive drawing section
   }
