@@ -96,6 +96,15 @@ export class MyScene extends CGFscene {
       this.popMatrix();
     }
 
+    /*if(this.displayUnitCube){
+      this.pushMatrix();
+      this.scale(6,8.5,0.5);
+      this.translate(0,0,-0.6);
+      this.unitcube.display();
+      this.popMatrix();
+    }
+    */
+
     if(this.displayMyTangram){
       this.pushMatrix();
       this.translate(0,-0.8,0);
