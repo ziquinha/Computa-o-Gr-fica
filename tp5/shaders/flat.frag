@@ -23,6 +23,12 @@ uniform lightProperties uLight[NUMBER_OF_LIGHTS];
 varying vec4 vPosition;
 
 void main() {
-    vec3 grayscale = vec3(0.299 * gl_FragColor.r + 0.587 * gl_FragColor.g + 0.114 * gl_FragColor.b);
-    gl_FragColor = vec4(grayscale, 1.0);
+		gl_FragColor =  vec4(0.6,0.6,0.9, 1.0) * uLight[0].diffuse;
+
+    if (vPosition.y > 0.5) {
+        gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0); // amarelo
+    } else {
+        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0); // azul
+    }
+
 }
