@@ -10,11 +10,15 @@ varying vec2 vTextureCoord;
 
 uniform sampler2D uSampler2;
 
+uniform float timeFactor;
+
 void main() {
 	vec3 offset = vec3(0.0, 0.0, 0.0);
 
-	//Why does the order of the following line matter?
 	vTextureCoord = aTextureCoord;
+
+	vTextureCoord.x += timeFactor*0.1;
+	vTextureCoord.y += timeFactor*0.1;
 
 	vec4 filter = texture2D(uSampler2, vec2(0.0,0.1)+vTextureCoord);
 
@@ -24,6 +28,5 @@ void main() {
 
 	gl_Position = uPMatrix * uMVMatrix * vertex;
 
-	
 }
 
