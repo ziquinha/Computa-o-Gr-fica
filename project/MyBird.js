@@ -11,8 +11,8 @@ export class MyBird extends CGFobject {
 	constructor(scene) {
 		super(scene);
 		this.angleY=0;
-		this.speed=1;
-		this.pos = [0, 0, 0]
+		this.speed=0;
+		this.pos = [0, 0, 0];
 		this.initBuffers();
 	}
 	
@@ -28,7 +28,25 @@ export class MyBird extends CGFobject {
 
 	update(){
 		console.log("update");
-		this.pos[0] += this.speed;
+		this.pos[0] += this.speed * Math.cos(this.angleY); //X
+		this.pos[2] -= this.speed * Math.sin(this.angleY); //Z
+	}
+
+	accelerate(v){
+		if(this.speed+v >= 0){
+			this.speed+=v;
+		}
+	}
+
+	turn(degrees){
+		var rad = Math.PI * degrees/180;
+		this.angleY += rad;
+	}
+
+	reset(){
+		this.angleY=0;
+		this.speed=0;
+		this.pos = [0, 0, 0];
 	}
 
 	display(){
@@ -39,7 +57,14 @@ export class MyBird extends CGFobject {
 			0.0, 0.0, 1.0, 0.0,
 			this.pos[0], this.pos[1], this.pos[2], 1.0,
 		];
+		var rotate = [
+			Math.cos(this.angleY), 0.0, -Math.sin(this.angleY), 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			Math.sin(this.angleY), 0.0, Math.cos(this.angleY), 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
 		this.scene.multMatrix(translate);
+		this.scene.multMatrix(rotate);
 		this.body.display();
 		
 		this.wingRight.display();

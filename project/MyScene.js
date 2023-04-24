@@ -38,6 +38,9 @@ export class MyScene extends CGFscene {
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.scaleFactor = 1;
+    this.speedFactor = 1;
+
     this.setUpdatePeriod(50);
   }
 
@@ -70,12 +73,32 @@ export class MyScene extends CGFscene {
     var keysPressed = false;
 
     if(this.gui.isKeyPressed("KeyW")){
+      this.bird.accelerate(this.speedFactor);
       text+=" W ";
       keysPressed = true;
     }
 
     if(this.gui.isKeyPressed("KeyS")){
+      this.bird.accelerate(-this.speedFactor);
       text+=" S ";
+      keysPressed = true;
+    }
+
+    if(this.gui.isKeyPressed("KeyA")){
+      this.bird.turn(5);
+      text+=" A ";
+      keysPressed = true;
+    }
+
+    if(this.gui.isKeyPressed("KeyD")){
+      this.bird.turn(-5);
+      text+=" D ";
+      keysPressed = true;
+    }
+
+    if(this.gui.isKeyPressed("KeyR")){
+      this.bird.reset();
+      text+=" R ";
       keysPressed = true;
     }
 
@@ -106,12 +129,9 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
-    this.bird.display(this);
     this.appearance.apply();
-    this.translate(0,-100,0);
-    this.scale(400,400,400);
-    this.rotate(-Math.PI/2.0,1,0,0);
-    //this.bird.display();
+    this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+    this.bird.display(this);
     this.popMatrix();
 
     // ---- END Primitive drawing section
