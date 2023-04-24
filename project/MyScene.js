@@ -25,7 +25,7 @@ export class MyScene extends CGFscene {
 
     //Initialize scene objects
     this.axis = new CGFaxis(this);
-    this.plane = new MyBird(this);
+    this.bird = new MyBird(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -33,18 +33,21 @@ export class MyScene extends CGFscene {
 
     this.enableTextures(true);
 
-this.texture = new CGFtexture(this, "images/terrain.jpg");
-this.appearance = new CGFappearance(this);
-this.appearance.setTexture(this.texture);
-this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+    this.texture = new CGFtexture(this, "images/terrain.jpg");
+    this.appearance = new CGFappearance(this);
+    this.appearance.setTexture(this.texture);
+    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.setUpdatePeriod(50);
   }
+
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[0].enable();
     this.lights[0].update();
   }
+
   initCameras() {
     this.camera = new CGFcamera(
       1.0,
@@ -54,12 +57,38 @@ this.appearance.setTextureWrap('REPEAT', 'REPEAT');
       vec3.fromValues(0, 0, 0)
     );
   }
+
   setDefaultAppearance() {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
   }
+
+  checkKeys(){
+    var text="Keys pressed: ";
+    var keysPressed = false;
+
+    if(this.gui.isKeyPressed("KeyW")){
+      text+=" W ";
+      keysPressed = true;
+    }
+
+    if(this.gui.isKeyPressed("KeyS")){
+      text+=" S ";
+      keysPressed = true;
+    }
+
+    if(keysPressed){
+      console.log(text);
+    }
+  }
+
+  update(){
+    this.checkKeys();
+    this.bird.update();
+  }
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -77,12 +106,12 @@ this.appearance.setTextureWrap('REPEAT', 'REPEAT');
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
-    this.plane.display();
+    this.bird.display(this);
     this.appearance.apply();
     this.translate(0,-100,0);
     this.scale(400,400,400);
     this.rotate(-Math.PI/2.0,1,0,0);
-    //this.plane.display();
+    //this.bird.display();
     this.popMatrix();
 
     // ---- END Primitive drawing section

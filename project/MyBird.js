@@ -10,6 +10,9 @@ import { MyBirdHead } from "./MyBirdHead.js";
 export class MyBird extends CGFobject {
 	constructor(scene) {
 		super(scene);
+		this.angleY=0;
+		this.speed=1;
+		this.pos = [0, 0, 0]
 		this.initBuffers();
 	}
 	
@@ -21,11 +24,24 @@ export class MyBird extends CGFobject {
 
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles
+	}
 
+	update(){
+		console.log("update");
+		this.pos[0] += this.speed;
 	}
 
 	display(){
+		this.scene.pushMatrix();
+		var translate = [
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			this.pos[0], this.pos[1], this.pos[2], 1.0,
+		];
+		this.scene.multMatrix(translate);
 		this.body.display();
+		
 		this.wingRight.display();
 		this.wingLeft.display();
 		this.head.display();
