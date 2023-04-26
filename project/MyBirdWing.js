@@ -13,8 +13,8 @@ export class MyBirdWing extends CGFobject {
 	initBuffers(isLeft) {
 		var tempVert1 = [
 			// Upper side
-			2.5, 3, 0.5, // 0
-			-1, 3, 1,  // 1
+			2.5, 3, 0, // 0
+			-1, 3, 0,  // 1
 			1, 3, 4,   // 2
 			3, 3, 4,   // 3
 			-1, 3, 12,  // 4

@@ -13,6 +13,11 @@ export class MyBird extends CGFobject {
 		this.angleY=0;
 		this.speed=0;
 		this.pos = [0, 0, 0];
+		this.flapAngle = 0;
+		this.flapDirection = 1;
+		this.oscilateHeight = 0;
+		this.oscilateDirection = 1;
+		this.isFlying = false;
 		this.initBuffers();
 	}
 	
@@ -27,12 +32,50 @@ export class MyBird extends CGFobject {
 	}
 
 	update(){
-		console.log("update");
-		this.pos[0] += this.speed * Math.cos(this.angleY); //X
-		this.pos[2] -= this.speed * Math.sin(this.angleY); //Z
+		if(this.isFlying){
+			this.pos[0] += this.speed * Math.cos(this.angleY); //X
+			this.pos[2] -= this.speed * Math.sin(this.angleY); //Z
+			this.flapWings();
+			this.oscilate();
+		}
+	}
+
+	flapWings(){
+		var change = this.flapDirection * (this.speed * Math.PI/10);
+		var tempAngle = this.flapAngle + change;
+		if(tempAngle > 2*Math.PI/6){
+			change = tempAngle - 2*Math.PI/6;
+			this.flapAngle -= change;
+			this.flapDirection = -1;
+		}
+		else if(tempAngle < -2*Math.PI/6){
+			change = tempAngle + 2*Math.PI/6;
+			this.flapAngle -= change;
+			this.flapDirection = 1;
+		}	
+		else{
+			this.flapAngle += change;
+		}
+	}
+
+	oscilate(){
+		if(this.oscilateDirection > 0){
+			this.oscilateHeight += this.oscilateDirection/5;
+			if(this.oscilateHeight >= 1.5){
+				this.oscilateDirection = -1;
+			}
+		}
+		if(this.oscilateDirection < 0){
+			this.oscilateHeight += 3*this.oscilateDirection/10;
+			if(this.oscilateHeight <= -1.5){
+				this.oscilateDirection = 1;
+			}
+		}
+		this.pos[1] = this.oscilateHeight; //X
 	}
 
 	accelerate(v){
+		this.isFlying = true;
 		if(this.speed+v >= 0){
 			this.speed+=v;
 		}
@@ -47,6 +90,11 @@ export class MyBird extends CGFobject {
 		this.angleY=0;
 		this.speed=0;
 		this.pos = [0, 0, 0];
+		this.flapAngle = 0;
+		this.flapDirection = 1;
+		this.oscilateHeight = 0;
+		this.oscilateDirection = 1;
+		this.isFlying = false;
 	}
 
 	display(){
@@ -66,10 +114,42 @@ export class MyBird extends CGFobject {
 		this.scene.multMatrix(translate);
 		this.scene.multMatrix(rotate);
 		this.body.display();
-		
-		this.wingRight.display();
-		this.wingLeft.display();
 		this.head.display();
+
+		var flapRightWing = [
+			1.0, 0.0, 0.0, 0.0, 
+			0.0, Math.cos(this.flapAngle), Math.sin(this.flapAngle), 0.0,
+			0.0, -Math.sin(this.flapAngle), Math.cos(this.flapAngle), 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
+		var flapLeftWing = [
+			1.0, 0.0, 0.0, 0.0, 
+			0.0, Math.cos(-this.flapAngle), Math.sin(-this.flapAngle), 0.0,
+			0.0, -Math.sin(-this.flapAngle), Math.cos(-this.flapAngle), 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
+		var resetX = [
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, -3.0, 0.0, 1.0,
+		];
+		var unresetX = [
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 3.0, 0.0, 1.0,
+		];
+		this.scene.multMatrix(unresetX);
+		this.scene.pushMatrix();
+		this.scene.multMatrix(flapRightWing);
+		this.scene.multMatrix(resetX);
+		this.wingRight.display();
+		this.scene.popMatrix();
+		this.scene.multMatrix(flapLeftWing);
+		this.scene.multMatrix(resetX);
+		this.wingLeft.display();
+		
 	}
 
 }
