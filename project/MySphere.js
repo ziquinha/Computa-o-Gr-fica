@@ -1,71 +1,94 @@
 import {CGFobject} from '../lib/CGF.js';
-/**
-* MySphere
-* @constructor
- * @param scene - Reference to MyScene object
- * @param slicesN - number of slices
- * @param stacksN - number of stacks
- * @param inverted - direction of the Normals - inverted = 1 means the Normals point towards the inside of the sphere
-*/
+
 export class MySphere extends CGFobject {
-	constructor(scene, slicesN, stacksN, inverted) {
-		super(scene);
-        this.slicesN = slicesN;
-        this.stacksN = stacksN;
-        this.inverted = inverted;
-		this.initBuffers();
-	}
-	
-	initBuffers() {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
+  /**
+   * @method constructor
+   * @param  {CGFscene} scene - MyScene object
+   * @param  {integer} slices - number of slices around Y axis
+   * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
+   */
+  constructor(scene, slices, stacks,scale) {
+    super(scene);
+    this.latDivs = stacks * 2;
+    this.longDivs = slices;
+    this.scale = scale;
 
-        var ang = 0;
-        var alphaAng = 2*Math.PI/this.slices;
-		var stackLen = 1/this.stacks;
+    this.initBuffers();
+  }
+
+  /**
+   * @method initBuffers
+   * Initializes the sphere buffers
+   * TODO: DEFINE TEXTURE COORDINATES
+   */
+  initBuffers() {
+    this.vertices = [];
+    this.indices = [];
+    this.normals = [];
+    this.texCoords = [];
+
+    var phi = 0;
+    var theta = 0;
+    var phiInc = Math.PI / this.latDivs;
+    var thetaInc = (2 * Math.PI) / this.longDivs;
+    var latVertices = this.longDivs + 1;
+
+    var textmaplatitude = 0;
+    var textmaplongitude = 0;
+  
+    var textmaplongpart = 1/this.longDivs;
+    var textmaplatpart = 1/this.latDivs;
+
+    // build an all-around stack at a time, starting on "north pole" and proceeding "south"
+    for (let latitude = 0; latitude <= this.latDivs; latitude++) {
+      var sinPhi = Math.sin(phi);
+      var cosPhi = Math.cos(phi);
+
+      textmaplongitude=0;
+      // in each stack, build all the slices around, starting on longitude 0
+      theta = 0;
+      for (let longitude = 0; longitude <= this.longDivs; longitude++) {
+        //--- Vertices coordinates
+        var x = Math.cos(theta) * sinPhi;
+        var y = cosPhi;
+        var z = Math.sin(-theta) * sinPhi;
+        this.vertices.push(x, y, z);
+
+        //--- Texture coordinates
+        this.texCoords.push(textmaplongitude,textmaplatitude);
         
-        for(var i = 0; i < this.slices; i++){
-            var xa=Math.sin(ang);
-            var ma=Math.cos(ang);
-            var count = i * (this.stacks+1);
-            
-			for (var t = 0; t < this.stacks+1; t++){
-                var k = - stackLen * t;
-                this.vertices.push(ma, -xa, k);
-                // push normal once for each vertex of the two triangles
-                this.normals.push(ma, -xa, 0);
-
-                if(t != 0){
-                    if(i<this.slices-1){
-                        this.indices.push((count +1), (count +0), (count + this.stacks+1));
-                        this.indices.push((count + this.stacks+2), (count +1), (count + this.stacks+1));
-                        count += 1;
-                    }
-                    else{
-                        this.indices.push((count +1), (count +0), (t-1) );
-                        this.indices.push((t), (count +1), (t-1));
-                        count += 1;
-                    }
-                }   
-			}
-            ang+=alphaAng;
+        //--- Indices
+        if (latitude < this.latDivs && longitude < this.longDivs) {
+          var current = latitude * latVertices + longitude;
+          var next = current + latVertices;
+          // pushing two triangles using indices from this round (current, current+1)
+          // and the ones directly south (next, next+1)
+          // (i.e. one full round of slices ahead)
+          
+          this.indices.push( current + 1, current, next);
+          this.indices.push( current + 1, next, next +1);
         }
+
+        //--- Normals
+        // at each vertex, the direction of the normal is equal to 
+        // the vector from the center of the sphere to the vertex.
+        // in a sphere of radius equal to one, the vector length is one.
+        // therefore, the value of the normal is equal to the position vectro
+        this.normals.push(x, y, z);
+        theta += thetaInc;
+
+        //--- Texture Coordinates
+        // To be done... 
+        // May need some additional code also in the beginning of the function.
+        textmaplongitude+=textmaplongpart;
         
-
-
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+      }
+      phi += phiInc;
+      textmaplatitude+=textmaplatpart;
     }
-    /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of slices
-     */
-    updateBuffers(complexity){
-        this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
 
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
+        
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
+  }
 }

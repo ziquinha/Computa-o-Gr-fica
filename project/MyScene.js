@@ -1,5 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyBird } from "./MyBird.js";
+import { MySphere } from "./MySphere.js";
 
 /**
  * MyScene
@@ -23,20 +24,26 @@ export class MyScene extends CGFscene {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    this.slices = 16;
+    this.stacks = 8;
+
     //Initialize scene objects
     this.axis = new CGFaxis(this);
+    this.sphere = new MySphere(this, this.slices,this.stacks);
     this.bird = new MyBird(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
+    this.displaySphere = true;
 
     this.enableTextures(true);
 
-    this.texture = new CGFtexture(this, "images/terrain.jpg");
+    this.texture = new CGFtexture(this, "images/earth.jpg");
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+
 
     this.scaleFactor = 1;
     this.speedFactor = 1;
@@ -126,13 +133,21 @@ export class MyScene extends CGFscene {
     // Draw axis
     if (this.displayAxis) this.axis.display();
 
+    if (this.displaySphere) {
+      this.pushMatrix();
+      this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+      this.appearance.apply();
+      this.sphere.display();
+      this.popMatrix();
+    }
+
     // ---- BEGIN Primitive drawing section
 
-    this.pushMatrix();
-    this.appearance.apply();
-    this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+    //this.pushMatrix();
+    //this.appearance.apply();
+    //this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
     this.bird.display(this);
-    this.popMatrix();
+    //this.popMatrix();
 
     // ---- END Primitive drawing section
   }
