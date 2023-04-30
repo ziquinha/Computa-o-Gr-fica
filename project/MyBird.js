@@ -149,7 +149,5 @@ export class MyBird extends CGFobject {
 		this.scene.multMatrix(flapLeftWing);
 		this.scene.multMatrix(resetX);
 		this.wingLeft.display();
-		
 	}
-
 }
