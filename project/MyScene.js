@@ -3,6 +3,7 @@ import { MyBird } from "./MyBird.js";
 import { MySphere } from "./MySphere.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyNest } from "./MyNest.js";
+import { MyPanorama } from "./MyPanorama.js";
 
 /**
  * MyScene
@@ -36,15 +37,26 @@ export class MyScene extends CGFscene {
     this.birdEgg = new MyBirdEgg(this, this.slices,this.stacks);
     this.nest = new MyNest(this, this.slices,this.stacks);
 
+    this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg"); 
+    this.panorama = new MyPanorama(this, this.panoramaTexture);
+
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displaySphere = false;
     this.displayBird = false;
     this.displayBirdEggs = false;
-    this.displayNest = true;
+    this.displayNest = false;
 
     this.enableTextures(true);
+
+    this.texture = new CGFappearance(this);
+    this.texture.setAmbient(0.9, 0.9, 0.9, 1);
+    this.texture.setDiffuse(0.9, 0.9, 0.9, 1);
+    this.texture.setSpecular(0.0, 0.0, 0.0, 1);
+    this.texture.setShininess(10.0);
+    this.texture.loadTexture('images/earth.jpg');
+    this.texture.setTextureWrap('REPEAT','REPEAT');
 
     this.scaleFactor = 1;
     this.speedFactor = 1;
@@ -137,10 +149,12 @@ export class MyScene extends CGFscene {
     if (this.displaySphere) {
       this.pushMatrix();
       this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-      this.appearance.apply();
+      this.texture.apply();
       this.sphere.display();
       this.popMatrix();
     }
+
+    this.panorama.display();
 
     // ---- BEGIN Primitive drawing section
 
