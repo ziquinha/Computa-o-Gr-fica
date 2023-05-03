@@ -1,4 +1,4 @@
-import {CGFobject} from '../lib/CGF.js';
+import {CGFobject, CGFappearance} from '../lib/CGF.js';
 import { MyBirdWing } from "./MyBirdWing.js";
 import { MyBirdBody } from "./MyBirdBody.js";
 import { MyBirdHead } from "./MyBirdHead.js";
@@ -18,6 +18,13 @@ export class MyBird extends CGFobject {
 		this.oscilateHeight = 0;
 		this.oscilateDirection = 1;
 		this.isFlying = false;
+
+		this.appearance = new CGFappearance(scene);
+		this.appearance.setAmbient(0.6, 0.6, 0.6, 1.0);
+    	this.appearance.setDiffuse(0.6, 0.6, 0.6, 1.0);
+    	this.appearance.setSpecular(0, 0, 0, 1.0);
+    	this.appearance.setShininess(10.0);
+
 		this.initBuffers();
 	}
 	
@@ -98,6 +105,7 @@ export class MyBird extends CGFobject {
 	}
 
 	display(){
+		this.appearance.apply();
 		this.scene.pushMatrix();
 		var translate = [
 			1.0, 0.0, 0.0, 0.0,
