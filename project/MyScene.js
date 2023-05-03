@@ -40,8 +40,8 @@ export class MyScene extends CGFscene {
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displaySphere = false;
-    this.displayBird = false;
-    this.displayBirdEggs = false;
+    this.displayBird = true;
+    this.displayBirdEggs = true;
     this.displayNest = true;
 
     this.enableTextures(true);
