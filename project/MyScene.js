@@ -4,6 +4,7 @@ import { MySphere } from "./MySphere.js";
 import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyNest } from "./MyNest.js";
 import { MyPanorama } from "./MyPanorama.js";
+import { MyTerrain } from "./MyTerrain.js";
 
 /**
  * MyScene
@@ -39,12 +40,14 @@ export class MyScene extends CGFscene {
 
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg"); 
     this.panorama = new MyPanorama(this, this.panoramaTexture);
+    this.terrain = new MyTerrain(this);
+
 
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displaySphere = false;
-    this.displayBird = false;
+    this.displayBird = true;
     this.displayBirdEggs = false;
     this.displayNest = false;
 
@@ -155,6 +158,19 @@ export class MyScene extends CGFscene {
     }
 
     this.panorama.display();
+
+    // Terrain
+    this.texture2 = new CGFtexture(this, "images/terrain.jpg");
+    this.appearance = new CGFappearance(this);
+
+    this.appearance.setTexture(this.texture2);
+    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+    this.pushMatrix();
+    this.appearance.apply();
+    this.translate(0, -100, 0); 
+    this.scale(8,8,8);
+    this.terrain.display();
+    this.popMatrix();
 
     // ---- BEGIN Primitive drawing section
 
