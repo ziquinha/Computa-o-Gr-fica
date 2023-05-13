@@ -39,14 +39,15 @@ export class MyScene extends CGFscene {
 
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg"); 
     this.panorama = new MyPanorama(this, this.panoramaTexture);
-
+    
     //Objects connected to MyInterface
+    this.displayNormals = true;
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displaySphere = false;
     this.displayBird = true;
-    this.displayBirdEggs = true;
-    this.displayNest = true;
+    this.displayBirdEggs = false;
+    this.displayNest = false;
 
     this.enableTextures(true);
 
@@ -161,6 +162,8 @@ export class MyScene extends CGFscene {
     //this.pushMatrix();
     //this.appearance.apply();
     //this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+    
+    if(this.displayNormals) this.bird.enableNormalViz();
     if (this.displayBird) this.bird.display(this);
 
     if (this.displayNest) this.nest.display(this);
@@ -170,6 +173,7 @@ export class MyScene extends CGFscene {
       this.birdEgg.display(this);
       this.popMatrix();
     }
+
     //this.popMatrix();
 
     // ---- END Primitive drawing section

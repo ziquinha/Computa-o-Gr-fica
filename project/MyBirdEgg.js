@@ -12,6 +12,7 @@ export class MyBirdEgg extends CGFobject {
     this.latDivs = stacks * 2;
     this.longDivs = slices;
     this.scale = scale;
+    
     this.texture = new CGFtexture(scene, "images/egg.jpg");
     this.appearance = new CGFappearance(scene);
     this.appearance.setAmbient(0.6, 0.6, 0.6, 1.0);
