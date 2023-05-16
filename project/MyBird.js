@@ -18,6 +18,11 @@ export class MyBird extends CGFobject {
 		this.oscilateHeight = 0;
 		this.oscilateDirection = 1;
 		this.isFlying = false;
+		this.isDescending = false;
+		this.isAscending = false;
+		this.minHeight;
+		this.heightIncrement;
+		this.heightPreDescent;
 
 		this.initBuffers();
 	}
@@ -40,9 +45,25 @@ export class MyBird extends CGFobject {
 		if(this.isFlying){
 			this.pos[0] += this.speed * Math.cos(this.angleY); //X
 			this.pos[2] -= this.speed * Math.sin(this.angleY); //Z
-			this.flapWings();
+		}
+		if(this.isDescending){
+			this.pos[1] -= this.heightIncrement;
+			if(this.pos[1] <= this.minHeight){
+				this.isDescending = false;
+				this.isAscending = true;
+			}
+		}
+		else if(this.isAscending){
+			this.pos[1] += this.heightIncrement;
+			if(this.pos[1] >= 0){
+				this.isAscending = false;
+				this.pos[1] = this.heightPreDescent;
+			}
+		}
+		else{
 			this.oscilate();
 		}
+		this.flapWings();
 	}
 
 	flapWings(){
@@ -91,6 +112,13 @@ export class MyBird extends CGFobject {
 		this.angleY += rad;
 	}
 
+	beginDescent(minHeight){
+		this.minHeight = minHeight+2;
+		this.isDescending = true;
+		this.heightIncrement = -(minHeight - this.pos[1])/20;
+		this.heightPreDescent = pos[1];
+	}
+
 	reset(){
 		this.angleY=0;
 		this.speed=0;
@@ -100,6 +128,8 @@ export class MyBird extends CGFobject {
 		this.oscilateHeight = 0;
 		this.oscilateDirection = 1;
 		this.isFlying = false;
+		this.isDescending = false;
+		this.isAscending = false;
 	}
 
 	display(){

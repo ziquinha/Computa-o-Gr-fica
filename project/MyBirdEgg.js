@@ -7,11 +7,13 @@ export class MyBirdEgg extends CGFobject {
    * @param  {integer} slices - number of slices around Y axis
    * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
    */
-  constructor(scene, slices, stacks,scale) {
+  constructor(scene, slices, stacks, scale, floorY) {
     super(scene);
     this.latDivs = stacks * 2;
     this.longDivs = slices;
     this.scale = scale;
+    this.pos = this.getEggPlacement(floorY);
+    this.angles = this.getEggAngles();
     
     this.texture = new CGFtexture(scene, "images/egg.jpg");
     this.appearance = new CGFappearance(scene);
@@ -24,6 +26,23 @@ export class MyBirdEgg extends CGFobject {
 
     this.initBuffers();
   }
+
+  
+
+  getEggPlacement(floorY){
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+    }
+    return([rand(-20, 80), floorY, rand(30, 140)])
+  }
+
+  getEggAngles(){
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+    }
+    return([rand(0, 360)*Math.PI/180, rand(0, 360)*Math.PI/180, rand(0, 360)*Math.PI/180])
+  }
+
 
   /**
    * @method initBuffers
@@ -106,7 +125,28 @@ export class MyBirdEgg extends CGFobject {
 
   display(){
     this.appearance.apply();
+    this.scene.translate(this.pos[0],this.pos[1], this.pos[2]);
+    var rotateX = [
+			1.0, 0.0, 0.0, 0.0, 
+			0.0, Math.cos(this.angles[0]), Math.sin(this.angles[0]), 0.0,
+			0.0, -Math.sin(this.angles[0]), Math.cos(this.angles[0]), 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
+    var rotateY = [
+			Math.cos(this.angles[1]), 0.0, -Math.sin(this.angles[1]), 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			Math.sin(this.angles[1]), 0.0, Math.cos(this.angles[1]), 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
+    var rotateZ = [
+			Math.cos(this.angles[2]), Math.sin(this.angles[2]), 0.0, 0.0,
+			-Math.sin(this.angles[2]), Math.cos(this.angles[2]), 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 0.0, 0.0, 1.0,
+		];
+    this.scene.multMatrix(rotateZ);
+    this.scene.multMatrix(rotateY);
+    this.scene.multMatrix(rotateX);
     super.display();
-
   }
 }

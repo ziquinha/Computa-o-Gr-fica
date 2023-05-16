@@ -39,7 +39,7 @@ export class MySphere extends CGFobject {
         var x = Math.cos(theta) * sinPhi;
         var y = cosPhi;
         var z = Math.sin(-theta) * sinPhi;
-        this.vertices.push(x, y, z);
+        this.vertices.push(this.scale * x,this.scale * y,this.scale * z);
 
         this.texCoords.push(textmaplongitude, textmaplatitude);
 
