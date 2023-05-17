@@ -185,7 +185,7 @@ export class MyScene extends CGFscene {
     this.translate(0, -100, 0); 
     this.scale(8,8,8);
     this.terrain.display();
-    this.popMatrix();
+    this.popMatrix(); 
 
     // ---- BEGIN Primitive drawing section
     
