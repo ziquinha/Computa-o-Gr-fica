@@ -185,17 +185,12 @@ export class MyScene extends CGFscene {
     this.panorama.display();
 
     // Terrain
-    this.texture2 = new CGFtexture(this, "images/terrain.jpg");
-    this.appearance = new CGFappearance(this);
-
-    this.appearance.setTexture(this.texture2);
-    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+    
     this.pushMatrix();
-    this.appearance.apply();
     this.translate(0, -100, 0); 
     this.scale(8,8,8);
     this.terrain.display();
-    this.popMatrix();
+    this.popMatrix(); 
 
     // ---- BEGIN Primitive drawing section
     
