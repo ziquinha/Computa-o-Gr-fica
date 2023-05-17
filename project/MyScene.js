@@ -54,7 +54,7 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayNormals = true;
-    this.displayAxis = true;
+    this.displayAxis = false;
     this.displaySphere = false;
     this.displayBird = true;
     this.displayBirdEggs = true;
@@ -214,55 +214,8 @@ export class MyScene extends CGFscene {
         egg.display();
         this.popMatrix();
       })
-      /*
-      this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-      this.pushMatrix();
-      this.translate(-100, -63, 0); 
-      this.birdEggs[0].display(this);
-      this.popMatrix();
-      this.pushMatrix();
-      this.translate(110, -68, 40);
-      var angle1=70;
-      var angle2=30;
-      var rotate = [
-        1.0, 0.0, 0.0, 0.0, 
-			0.0, Math.cos(angle1), Math.sin(angle1), 0.0,
-			0.0, -Math.sin(angle1), Math.cos(angle1), 0.0,
-			0.0, 0.0, 0.0, 1.0,
-      ];
-      var rotate2 = [
-        Math.cos(angle2), 0.0, -Math.sin(angle2), 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        Math.sin(angle2), 0.0, Math.cos(angle2), 0.0,
-        0.0, 0.0, 0.0, 1.0,
-      ];
-      this.multMatrix(rotate2);
-      this.multMatrix(rotate);
-      this.birdEggs[1].display(this);
-      this.popMatrix();
-      this.pushMatrix();
-      this.translate(10, -56, 40);
-      var angle1=60;
-      var angle2=30;
-      var rotate = [
-        1.0, 0.0, 0.0, 0.0, 
-			0.0, Math.cos(angle1), Math.sin(angle1), 0.0,
-			0.0, -Math.sin(angle1), Math.cos(angle1), 0.0,
-			0.0, 0.0, 0.0, 1.0,
-      ];
-      var rotate2 = [
-        Math.cos(angle2), 0.0, -Math.sin(angle2), 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        Math.sin(angle2), 0.0, Math.cos(angle2), 0.0,
-        0.0, 0.0, 0.0, 1.0,
-      ];
-      this.multMatrix(rotate2);
-      this.multMatrix(rotate)
-      this.birdEggs[2].display(this);
-      this.popMatrix();*/
+      
     }
-
-    //this.popMatrix();
 
     // ---- END Primitive drawing section
   }

@@ -27,10 +27,7 @@ export class MyBird extends CGFobject {
 		this.heightPreDescent;
 		this.closeEnoughDist = 10;
 
-		this.egg =  new MyBirdEgg(this.scene, this.scene.slices, this.scene.stacks, this.scale, this.minHeight, false, false);
-		this.egg.bePickedUp();
-		
-
+		this.egg = null;
 
 		this.initBuffers();
 	}
@@ -132,10 +129,12 @@ export class MyBird extends CGFobject {
 	}
 
 	beginDescent(minHeight){
-		this.minHeight = minHeight+2;
-		this.isDescending = true;
-		this.heightIncrement = -(minHeight - this.pos[1])/20;
-		this.heightPreDescent = this.pos[1];
+		if(this.egg == null){
+			this.minHeight = minHeight+2;
+			this.isDescending = true;
+			this.heightIncrement = -(minHeight - this.pos[1])/20;
+			this.heightPreDescent = this.pos[1];
+		}
 	}
 
 	closeEnough(coords1, coords2){
@@ -165,10 +164,11 @@ export class MyBird extends CGFobject {
 	dropEgg(nest){
 		if(this.egg != null){
 			console.log("Checking")
-			console.log(nest.pos)
-			if(this.closeEnough([this.pos[0], this.pos[2]], [nest.pos[0], nest.pos[2]])){
+			console.log(nest.pos);
+			var simPos = this.egg.simulateDrop(this.pos, this.angleY, this.speed);
+			if(this.closeEnough([simPos[0], simPos[2]], [nest.pos[0], nest.pos[2]])){
 				console.log("dropping");
-				this.egg.beginDrop(nest, this.pos, this.angleY);
+				this.egg.beginDrop(this.pos, this.angleY, this.speed);
 			}		
 		}
 	}
