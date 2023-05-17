@@ -1,4 +1,5 @@
 import {CGFobject, CGFappearance, CGFtexture} from '../lib/CGF.js';
+import { MyNest } from "./MyNest.js";
 
 export class MyBirdEgg extends CGFobject {
   /**
@@ -7,13 +8,17 @@ export class MyBirdEgg extends CGFobject {
    * @param  {integer} slices - number of slices around Y axis
    * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
    */
-  constructor(scene, slices, stacks, scale, floorY) {
+  constructor(scene, slices, stacks, scale, floorY, randomLoc, randomRot) {
     super(scene);
     this.latDivs = stacks * 2;
     this.longDivs = slices;
     this.scale = scale;
-    this.pos = this.getEggPlacement(floorY);
-    this.angles = this.getEggAngles();
+    this.pos = randomLoc ? this.getEggPlacement(floorY) : [0,0,0];
+    this.angles = randomRot ? this.getEggAngles() : [0,0,0];
+    this.isDropping = false;
+    this.dropInterval;
+    this.eggDefaultPos = [0,0,0];
+		this.eggAngle=-100*Math.PI/180;
     
     this.texture = new CGFtexture(scene, "images/egg.jpg");
     this.appearance = new CGFappearance(scene);
@@ -27,7 +32,20 @@ export class MyBirdEgg extends CGFobject {
     this.initBuffers();
   }
 
-  
+  beginDrop(nest, initPos, angle){
+    this.isDropping = true;
+    this.pos[0] = initPos[0];
+    this.pos[1] = initPos[1];
+    this.pos[2] = initPos[2];
+    this.angles[1] = angle;
+    this.dropInterval = (initPos[1] + this.eggDefaultPos[1]) - this.scene.nest.pos[1]/40;
+    console.log(this.scene.nest);
+  }
+
+  bePickedUp(){
+    this.eggDefaultPos = [-2.5, 1, 0];
+    this.angles = [0, 0, this.eggAngle];
+  }
 
   getEggPlacement(floorY){
     function rand(min, max) {
@@ -41,6 +59,15 @@ export class MyBirdEgg extends CGFobject {
       return Math.floor(Math.random() * (max - min) ) + min;
     }
     return([rand(0, 360)*Math.PI/180, rand(0, 360)*Math.PI/180, rand(0, 360)*Math.PI/180])
+  }
+
+  update(){
+    if(this.isDropping){
+      this.pos[1] -= this.dropInterval;
+    }
+    if(this.pos[1] <= this.scene.nest.pos[1]){
+      this.isDropping = false;
+    }
   }
 
 
@@ -144,9 +171,11 @@ export class MyBirdEgg extends CGFobject {
 			0.0, 0.0, 1.0, 0.0,
 			0.0, 0.0, 0.0, 1.0,
 		];
-    this.scene.multMatrix(rotateZ);
+
     this.scene.multMatrix(rotateY);
+    this.scene.translate(this.eggDefaultPos[0],this.eggDefaultPos[1], this.eggDefaultPos[2]);
     this.scene.multMatrix(rotateX);
+    this.scene.multMatrix(rotateZ);
     super.display();
   }
 }
