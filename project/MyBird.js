@@ -2,6 +2,8 @@ import {CGFobject} from '../lib/CGF.js';
 import { MyBirdWing } from "./MyBirdWing.js";
 import { MyBirdBody } from "./MyBirdBody.js";
 import { MyBirdHead } from "./MyBirdHead.js";
+import { MyBirdEgg } from "./MyBirdEgg.js";
+import { MyNest } from "./MyNest.js";
 /**
  * MyTriangle
  * @constructor
@@ -23,6 +25,9 @@ export class MyBird extends CGFobject {
 		this.minHeight;
 		this.heightIncrement;
 		this.heightPreDescent;
+		this.closeEnoughDist = 10;
+
+		this.egg = null;
 
 		this.initBuffers();
 	}
@@ -32,7 +37,6 @@ export class MyBird extends CGFobject {
 		this.wingLeft = new MyBirdWing(this.scene, 1);
 		this.body = new MyBirdBody(this.scene);
 		this.head = new MyBirdHead(this.scene);
-
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles
 	}
@@ -51,6 +55,18 @@ export class MyBird extends CGFobject {
 			if(this.pos[1] <= this.minHeight){
 				this.isDescending = false;
 				this.isAscending = true;
+				var pickedUp = -1;
+				if(this.egg == null){
+					for(let i=0; i<this.scene.birdEggs.length; i++){
+						if(pickedUp == -1 && this.closeEnough(this.scene.birdEggs[i].pos, this.pos)){
+							pickedUp = i;
+						}
+					}
+
+					if(pickedUp != -1){
+						this.pickUpEgg(pickedUp)
+					}
+				}
 			}
 		}
 		else if(this.isAscending){
@@ -113,10 +129,48 @@ export class MyBird extends CGFobject {
 	}
 
 	beginDescent(minHeight){
-		this.minHeight = minHeight+2;
-		this.isDescending = true;
-		this.heightIncrement = -(minHeight - this.pos[1])/20;
-		this.heightPreDescent = pos[1];
+		if(this.egg == null){
+			this.minHeight = minHeight+2;
+			this.isDescending = true;
+			this.heightIncrement = -(minHeight - this.pos[1])/20;
+			this.heightPreDescent = this.pos[1];
+		}
+	}
+
+	closeEnough(coords1, coords2){
+		var diff = 0;
+		console.log(coords1);
+		console.log(coords2);
+		for(let i=0; i<coords1.length; i++){
+			diff += (coords1[i] - coords2[i])*(coords1[i] - coords2[i])
+		}
+		console.log(diff);
+		diff = Math.sqrt(diff);
+		console.log(diff);
+		if(diff < this.closeEnoughDist){
+			return true;
+		}
+		return false;
+	}
+
+	pickUpEgg(index){
+		console.log("Picking up egg # " + index);
+		this.scene.removeEgg(index);
+		this.egg = new MyBirdEgg(this.scene, this.scene.slices, this.scene.stacks, this.scale, this.minHeight, false);
+		console.log(this.egg);
+		this.egg.bePickedUp();
+	}
+
+	dropEgg(nest){
+		if(this.egg != null){
+			console.log("Checking")
+			console.log(nest.pos);
+			var simPos = this.egg.simulateDrop(this.pos, this.angleY, this.speed);
+			if(this.closeEnough([simPos[0], simPos[2]], [nest.pos[0], nest.pos[2]])){
+				console.log("dropping");
+				this.egg.beginDrop(this.pos, this.angleY, this.speed);
+			}		
+		}
 	}
 
 	reset(){
@@ -133,6 +187,18 @@ export class MyBird extends CGFobject {
 	}
 
 	display(){
+		if(this.egg != null && this.egg.isDropping){
+			this.egg.update();
+			if(this.egg.isDropping){
+				this.scene.pushMatrix();
+				this.egg.display();
+				this.scene.popMatrix();
+			}
+			else{
+				this.egg=null;
+				this.scene.nest.putEgg();
+			}
+		}
 		this.scene.pushMatrix();
 		var translate = [
 			1.0, 0.0, 0.0, 0.0,
@@ -148,9 +214,14 @@ export class MyBird extends CGFobject {
 		];
 		this.scene.multMatrix(translate);
 		this.scene.multMatrix(rotate);
+		if(this.egg != null && !this.egg.isDropping){
+			this.scene.pushMatrix();
+			this.egg.display();
+			this.scene.popMatrix();
+		}
 		this.body.display();
 		this.head.display();
-
+		
 		var flapRightWing = [
 			1.0, 0.0, 0.0, 0.0, 
 			0.0, Math.cos(this.flapAngle), Math.sin(this.flapAngle), 0.0,
@@ -184,5 +255,7 @@ export class MyBird extends CGFobject {
 		this.scene.multMatrix(flapLeftWing);
 		this.scene.multMatrix(resetX);
 		this.wingLeft.display();
+		this.scene.popMatrix();
+		
 	}
 }

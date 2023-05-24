@@ -39,16 +39,16 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.sphere = new MySphere(this, this.slices,this.stacks);
-    this.bird = new MyBird(this);
 
     this.nBirdEggs = 4;
     this.birdEggs = [];
-    this.floorY = -63;
+    this.floorY = -62;
     for(let i =0; i <this.nBirdEggs; i++){
-      this.birdEggs.push(new MyBirdEgg(this, this.slices,this.stacks, this.scaleFactor, this.floorY));
+      this.birdEggs.push(new MyBirdEgg(this, this.slices,this.stacks, this.scaleFactor, this.floorY, true, true));
     }
 
-    this.nest = new MyNest(this, this.slices,this.stacks);
+    this.nest = new MyNest(this, this.slices, this.stacks);
+    this.bird = new MyBird(this);
 
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg"); 
     this.panorama = new MyPanorama(this, this.panoramaTexture);
@@ -60,7 +60,7 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayNormals = true;
-    this.displayAxis = true;
+    this.displayAxis = false;
     this.displaySphere = false;
     this.displayBird = true;
     this.displayBirdEggs = true;
@@ -146,6 +146,12 @@ export class MyScene extends CGFscene {
       keysPressed = true;
     }
 
+    if(this.gui.isKeyPressed("KeyO")){
+      this.bird.dropEgg(this.nest);
+      text+=" O ";
+      keysPressed = true;
+    }
+
     if(keysPressed){
       console.log(text);
     }
@@ -156,7 +162,11 @@ export class MyScene extends CGFscene {
     this.bird.update();
   }
 
-  
+  removeEgg(index){
+    var egg = this.birdEggs.splice(index, 1);
+    console.log(this.birdEggs);
+    return egg;
+  }
 
   display() {
     // ---- BEGIN Background, camera and axis setup
@@ -200,8 +210,7 @@ export class MyScene extends CGFscene {
     // Display Nest
     if (this.displayNest){
       this.pushMatrix();
-      this.translate(84, -67, -5); 
-      this.scale(4, 4, 4);
+      
       this.nest.display(this);
       this.popMatrix();
     }
@@ -210,7 +219,7 @@ export class MyScene extends CGFscene {
     if (this.displayBirdEggs) {
       this.birdEggs.forEach(egg => {
         this.pushMatrix();
-        egg.display(this);
+        egg.display();
         this.popMatrix();
       })
     }

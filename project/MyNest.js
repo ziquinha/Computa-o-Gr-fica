@@ -1,4 +1,5 @@
 import {CGFobject, CGFappearance, CGFtexture} from '../lib/CGF.js';
+import { MyBirdEgg } from "./MyBirdEgg.js";
 
 export class MyNest extends CGFobject {
   /**
@@ -7,11 +8,16 @@ export class MyNest extends CGFobject {
    * @param  {integer} slices - number of slices around Y axis
    * @param  {integer} stacks - number of stacks along Y axis, from the center to the poles (half of sphere)
    */
-  constructor(scene, slices, stacks,scale) {
+  constructor(scene, slices, stacks) {
     super(scene);
     this.latDivs = stacks * 2;
     this.longDivs = slices;
-    this.scale = scale;
+    this.scale = 4;
+    this.pos = [84, -67, -5];
+    this.eggs = [];
+    this.nEggs = 0;
+    this.eggPositions = [[1.5, -1, 1.5], [-1.5, -1, -1.5], [1.5, -1, -1.5], [-1.5, -1, 1.5], [0, -1, 0]];
+
     this.texture = new CGFtexture(scene, "images/nest.jpg");
     this.appearance = new CGFappearance(scene);
     this.appearance.setAmbient(0.6, 0.6, 0.6, 1.0);
@@ -111,9 +117,25 @@ export class MyNest extends CGFobject {
     this.initGLBuffers();
   }
 
+  putEgg(){
+    var egg = new MyBirdEgg(this.scene, this.scene.slices, this.scene.stacks, this.scale, this.minHeight, false, true);
+    egg.pos=this.eggPositions[this.nEggs];
+    this.nEggs++;
+    this.eggs.push(egg);
+    
+  }
+
   display(){
+    this.scene.pushMatrix();
+    this.scene.translate(...this.pos);
+    this.eggs.forEach(egg => {
+      this.scene.pushMatrix();
+      egg.display();
+      this.scene.popMatrix();
+    }) 
+    this.scene.scale(this.scale, this.scale, this.scale);
     this.appearance.apply();
     super.display();
-
+    this.scene.popMatrix();
   }
 }
