@@ -223,7 +223,7 @@ export class MyScene extends CGFscene {
         this.popMatrix();
       })
     }
-
+     //trees
     this.pushMatrix();
     this.myTreeGPatch.display();
     this.popMatrix();
