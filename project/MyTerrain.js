@@ -39,17 +39,17 @@ init(){
 	
 	// Show, hide shader code
 	onShaderCodeVizChanged(v) {
-		if (c)
+		if (v)
 			this.shadersDiv.style.display = "block";
 		else
 			this.shadersDiv.style.display = "none";
 	}
     
 	// Called when selected shader changes
-	onSelectedShaderChanged(c) {
+	onSelectedShaderChanged(v) {
 		// shader code
-		this.scene.vShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[c].vertexURL) + "</xmp>";
-		this.scene.fShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[c].fragmentURL) + "</xmp>";
+		this.scene.vShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[v].vertexURL) + "</xmp>";
+		this.scene.fShaderDiv.innerHTML = "<xmp>" + getStringFromUrl(this.testShaders[v].fragmentURL) + "</xmp>";
 
 		// scale factor
 		//this.onScaleFactorChanged(this.scene.scaleFactor);
