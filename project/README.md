@@ -46,6 +46,8 @@ O - Try to drop egg on the nest
 ![Screenshot 5](project/screenshots/project-t09g09-5.png)
 5 - Trees
 
-![Screenshot 6](project/screenshots/project-t09g09-6.png)
-
+![Screenshot 6](project/screenshots/project-t09g09-6.png)  
 6 - Parabola trajectory
+
+![](project/project-t09g09.mp4)  
+Video
