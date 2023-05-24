@@ -5,6 +5,9 @@ import { MyBirdEgg } from "./MyBirdEgg.js";
 import { MyNest } from "./MyNest.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyTerrain } from "./MyTerrain.js";
+import { MyBillboard } from "./MyBillboard.js";
+import { MyTreeGroupPatch } from "./MyTreeGroupPatch.js";
+import { MyTreeRowPatch } from "./MyTreeRowPatch.js";
 
 /**
  * MyScene
@@ -50,6 +53,9 @@ export class MyScene extends CGFscene {
     this.panoramaTexture = new CGFtexture(this, "images/panorama4.jpg"); 
     this.panorama = new MyPanorama(this, this.panoramaTexture);
     this.terrain = new MyTerrain(this);
+    this.billboard = new MyBillboard(this, 0,0,0);
+    this.myTreeRPatch = new MyTreeRowPatch (this, 90,-40, 10);
+    this.myTreeGPatch = new MyTreeGroupPatch (this,-90,-40,0);
 
 
     //Objects connected to MyInterface
@@ -59,6 +65,8 @@ export class MyScene extends CGFscene {
     this.displayBird = true;
     this.displayBirdEggs = true;
     this.displayNest = true;
+    this.displayTreeGroupPatch = true;
+    this.displayTreeRowPatch = true;
 
     this.enableTextures(true);
 
@@ -205,57 +213,19 @@ export class MyScene extends CGFscene {
         egg.display(this);
         this.popMatrix();
       })
-      /*
-      this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-      this.pushMatrix();
-      this.translate(-100, -63, 0); 
-      this.birdEggs[0].display(this);
-      this.popMatrix();
-      this.pushMatrix();
-      this.translate(110, -68, 40);
-      var angle1=70;
-      var angle2=30;
-      var rotate = [
-        1.0, 0.0, 0.0, 0.0, 
-			0.0, Math.cos(angle1), Math.sin(angle1), 0.0,
-			0.0, -Math.sin(angle1), Math.cos(angle1), 0.0,
-			0.0, 0.0, 0.0, 1.0,
-      ];
-      var rotate2 = [
-        Math.cos(angle2), 0.0, -Math.sin(angle2), 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        Math.sin(angle2), 0.0, Math.cos(angle2), 0.0,
-        0.0, 0.0, 0.0, 1.0,
-      ];
-      this.multMatrix(rotate2);
-      this.multMatrix(rotate);
-      this.birdEggs[1].display(this);
-      this.popMatrix();
-      this.pushMatrix();
-      this.translate(10, -56, 40);
-      var angle1=60;
-      var angle2=30;
-      var rotate = [
-        1.0, 0.0, 0.0, 0.0, 
-			0.0, Math.cos(angle1), Math.sin(angle1), 0.0,
-			0.0, -Math.sin(angle1), Math.cos(angle1), 0.0,
-			0.0, 0.0, 0.0, 1.0,
-      ];
-      var rotate2 = [
-        Math.cos(angle2), 0.0, -Math.sin(angle2), 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        Math.sin(angle2), 0.0, Math.cos(angle2), 0.0,
-        0.0, 0.0, 0.0, 1.0,
-      ];
-      this.multMatrix(rotate2);
-      this.multMatrix(rotate)
-      this.birdEggs[2].display(this);
-      this.popMatrix();*/
     }
 
-    //this.popMatrix();
+    this.pushMatrix();
+    this.myTreeGPatch.display();
+    this.popMatrix();
+
+
+    this.pushMatrix();
+    this.myTreeRPatch.display();
+    this.popMatrix();
 
     // ---- END Primitive drawing section
+    
   }
 
   
