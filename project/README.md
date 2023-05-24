@@ -31,19 +31,19 @@ O - Try to drop egg on the nest
 
 ## Screenshots
 
-![Screenshot 1](project/screenshots/project-t09g09-1.png)
+![Screenshot 1](project/screenshots/project-t09g09-1.png)  
 1 - Panorama
 
-![Screenshot 2](project/screenshots/project-t09g09-2.png)
+![Screenshot 2](project/screenshots/project-t09g09-2.png)  
 2 - Bird
 
-![Screenshot 3](project/screenshots/project-t09g09-3.png)
+![Screenshot 3](project/screenshots/project-t09g09-3.png)  
 3 - Terrain
 
-![Screenshot 4](project/screenshots/project-t09g09-4.png)
+![Screenshot 4](project/screenshots/project-t09g09-4.png)  
 4 - Nest and Eggs
 
-![Screenshot 5](project/screenshots/project-t09g09-5.png)
+![Screenshot 5](project/screenshots/project-t09g09-5.png)  
 5 - Trees
 
 ![Screenshot 6](project/screenshots/project-t09g09-6.png)  
